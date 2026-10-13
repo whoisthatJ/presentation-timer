@@ -101,10 +101,25 @@
               <span>Reset</span>
             </button>
           </div>
+          <div class="skip-controls">
+            <button class="button button-skip" id="skip-phase" type="button">
+              <span id="skip-phase-label">Skip to Questions</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  d="M4 10h11m-4-4 4 4-4 4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.6"
+                ></path>
+              </svg>
+            </button>
+          </div>
 
           <p class="session-note">
             <span class="sound-icon" aria-hidden="true">♫</span>
-            A soft chime marks the change of pace
+            2, 3, or 4 soft beeps mark each phase change
           </p>
         </section>
 
@@ -132,7 +147,7 @@
           <div class="phase-list" id="phase-list"></div>
           <p class="loop-note">
             <span aria-hidden="true">↻</span>
-            This sequence repeats automatically until you pause.
+            This sequence repeats automatically. You can also skip ahead at any time.
           </p>
         </section>
       </section>

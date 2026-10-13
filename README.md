@@ -8,9 +8,11 @@ A gentle, looping timer for student presentation sessions:
 
 The phase durations are editable by clicking a time. Changing the active phase
 updates its countdown immediately. Start the session to begin the loop; the
-timer advances automatically with a quiet two-note chime. Pause and reset
-controls are available at any time. Duration settings are saved in the browser
-on the current device.
+timer advances automatically, or use **Skip to…** to finish a phase early and
+move to the next. Each transition has a quiet phase-specific signal: two beeps
+for presentations, three for questions, and four for the speaker handoff.
+Pause and reset controls are available at any time. Duration settings are saved
+in the browser on the current device.
 
 ## Run locally
 

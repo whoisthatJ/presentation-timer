@@ -324,6 +324,31 @@ body.is-running .icon-pause {
   background: #eceee9;
 }
 
+.skip-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 9px;
+}
+
+.button-skip {
+  min-height: 34px;
+  padding: 0 10px;
+  background: transparent;
+  color: #777e75;
+  font-size: 11px;
+}
+
+.button-skip:hover {
+  background: #f5f6f3;
+  color: var(--green-dark);
+}
+
+.button-skip svg {
+  width: 15px;
+  height: 15px;
+  color: var(--green);
+}
+
 .session-note {
   display: flex;
   align-items: center;

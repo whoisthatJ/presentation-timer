@@ -16,6 +16,8 @@ const ringProgress = document.querySelector(".ring-progress");
 const startPauseButton = document.querySelector("#start-pause");
 const startPauseLabel = document.querySelector("#start-pause-label");
 const resetButton = document.querySelector("#reset");
+const skipPhaseButton = document.querySelector("#skip-phase");
+const skipPhaseLabel = document.querySelector("#skip-phase-label");
 const sessionStatus = document.querySelector("#session-status");
 const announcements = document.querySelector("#announcements");
 
@@ -179,6 +181,7 @@ function openDurationEditor(index, card) {
 function render() {
   renderPhases();
   phaseTitle.textContent = phases[currentPhase].name;
+  skipPhaseLabel.textContent = `Skip to ${phases[(currentPhase + 1) % phases.length].name}`;
   timeValue.textContent = formatTime(remaining);
   timerHint.textContent = running ? phases[currentPhase].nextHint : phases[currentPhase].hint;
   startPauseLabel.textContent = running ? "Pause session" : "Start session";
@@ -198,6 +201,7 @@ function render() {
 function start() {
   if (running) return;
   if (remaining <= 0) remaining = durations[currentPhase];
+  prepareAudio();
   running = true;
   deadline = Date.now() + remaining * 1000;
   intervalId = window.setInterval(tick, 100);
@@ -233,16 +237,19 @@ function tick() {
   if (nextRemaining === 0) advancePhase();
 }
 
-function advancePhase() {
+function advancePhase(endedEarly = false) {
+  const completedPhase = currentPhase;
   currentPhase = (currentPhase + 1) % phases.length;
   remaining = durations[currentPhase];
-  deadline = Date.now() + remaining * 1000;
-  playChime();
+  if (running) deadline = Date.now() + remaining * 1000;
+  playChime(completedPhase);
   render();
-  announcements.textContent = `${phases[currentPhase].name} begins.`;
+  announcements.textContent = endedEarly
+    ? `${phases[completedPhase].name} ended early. ${phases[currentPhase].name} begins.`
+    : `${phases[currentPhase].name} begins.`;
 }
 
-function playChime() {
+function prepareAudio() {
   try {
     const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextConstructor) return;
@@ -250,21 +257,30 @@ function playChime() {
     if (audioContext.state === "suspended") {
       audioContext.resume().catch((error) => console.warn("Could not resume audio playback.", error));
     }
+  } catch (error) {
+    console.warn("Could not prepare audio playback.", error);
+  }
+}
 
+function playChime(phaseIndex) {
+  try {
+    if (!audioContext) return;
     const now = audioContext.currentTime;
-    [659.25, 783.99].forEach((frequency, index) => {
+    const beepCounts = [2, 3, 4];
+    const frequencies = [587.33, 659.25, 783.99];
+    Array.from({ length: beepCounts[phaseIndex] }, (_, index) => index).forEach((index) => {
       const oscillator = audioContext.createOscillator();
       const gain = audioContext.createGain();
-      const startAt = now + index * 0.13;
+      const startAt = now + index * 0.14;
       oscillator.type = "sine";
-      oscillator.frequency.value = frequency;
+      oscillator.frequency.value = frequencies[phaseIndex];
       gain.gain.setValueAtTime(0.0001, startAt);
-      gain.gain.exponentialRampToValueAtTime(0.075, startAt + 0.025);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.35);
+      gain.gain.exponentialRampToValueAtTime(0.055, startAt + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.11);
       oscillator.connect(gain);
       gain.connect(audioContext.destination);
       oscillator.start(startAt);
-      oscillator.stop(startAt + 0.36);
+      oscillator.stop(startAt + 0.12);
     });
   } catch (error) {
     console.warn("Could not play the phase-change chime.", error);
@@ -276,5 +292,9 @@ startPauseButton.addEventListener("click", () => {
   else start();
 });
 resetButton.addEventListener("click", reset);
+skipPhaseButton.addEventListener("click", () => {
+  prepareAudio();
+  advancePhase(true);
+});
 
 render();
