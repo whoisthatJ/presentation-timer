@@ -162,9 +162,14 @@ function openDurationEditor(index, card) {
 
     durations[index] = total;
     saveDurations();
-    if (index === currentPhase && !running) remaining = total;
+    if (index === currentPhase) {
+      remaining = total;
+      if (running) deadline = Date.now() + total * 1000;
+    }
     render();
-    announcements.textContent = `${phases[index].name} duration set to ${formatTime(total)}.`;
+    announcements.textContent = `${phases[index].name} duration set to ${formatTime(total)}${
+      index === currentPhase ? ". The current countdown has been updated." : "."
+    }`;
   });
 
   minutesInput.focus();
@@ -242,7 +247,9 @@ function playChime() {
     const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextConstructor) return;
     audioContext ??= new AudioContextConstructor();
-    if (audioContext.state === "suspended") audioContext.resume();
+    if (audioContext.state === "suspended") {
+      audioContext.resume().catch((error) => console.warn("Could not resume audio playback.", error));
+    }
 
     const now = audioContext.currentTime;
     [659.25, 783.99].forEach((frequency, index) => {
