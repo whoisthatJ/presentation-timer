@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A calm, flexible timer for student presentations, questions, and speaker handoffs."
+    />
+    <meta name="theme-color" content="#f7f7f4" />
+    <title>Roomtone — presentation timer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Roomtone home">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          <span>roomtone</span>
+        </a>
+        <div class="topbar-note">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="session-status">Ready when you are</span>
+        </div>
+      </header>
+
+      <section class="workspace" aria-label="Presentation timer">
+        <div class="intro">
+          <p class="eyebrow">A little structure, a lot of room</p>
+          <h1>Keep the conversation<br class="desktop-break" /> moving.</h1>
+          <p class="intro-copy">
+            A gentle rhythm for sharing ideas, asking questions, and making space
+            for the next voice.
+          </p>
+        </div>
+
+        <section class="timer-card" aria-labelledby="phase-title">
+          <div class="timer-card-top">
+            <div>
+              <p class="eyebrow">NOW IN SESSION</p>
+              <h2 id="phase-title">Presentation</h2>
+            </div>
+            <div class="round-indicator" title="Presentation cycle">
+              <span class="round-icon" aria-hidden="true">↻</span>
+              <span>LOOPING</span>
+            </div>
+          </div>
+
+          <div class="timer-display">
+            <div
+              class="timer-ring"
+              id="timer-ring"
+              role="progressbar"
+              aria-label="Current phase progress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="100"
+            >
+              <svg viewBox="0 0 280 280" aria-hidden="true">
+                <circle class="ring-track" cx="140" cy="140" r="128"></circle>
+                <circle class="ring-progress" cx="140" cy="140" r="128"></circle>
+              </svg>
+              <div class="timer-center">
+                <span class="timer-label">TIME REMAINING</span>
+                <span class="time-value" id="time-value" role="timer" aria-live="off">02:00</span>
+                <span class="timer-hint" id="timer-hint">Your floor is yours.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="button button-primary" id="start-pause" type="button">
+              <svg class="button-icon icon-play" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M6.5 4.8v10.4L15 10 6.5 4.8Z" fill="currentColor"></path>
+              </svg>
+              <svg class="button-icon icon-pause" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M5.7 4.5h3v11h-3zM11.3 4.5h3v11h-3z" fill="currentColor"></path>
+              </svg>
+              <span id="start-pause-label">Start session</span>
+            </button>
+            <button class="button button-reset" id="reset" type="button" aria-label="Reset session">
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  d="M4.3 8.1A6 6 0 1 1 4 11.6M4.2 4.9v3.4h3.4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.6"
+                ></path>
+              </svg>
+              <span>Reset</span>
+            </button>
+          </div>
+
+          <p class="session-note">
+            <span class="sound-icon" aria-hidden="true">♫</span>
+            A soft chime marks the change of pace
+          </p>
+        </section>
+
+        <section class="flow-section" aria-labelledby="flow-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">THE FLOW</p>
+              <h2 id="flow-title">One speaker at a time</h2>
+            </div>
+            <p class="edit-note">
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="m10.9 2.3 2.8 2.8-7.9 7.8-3.3.6.6-3.3 7.8-7.9ZM9.5 3.7l2.8 2.8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.25"
+                ></path>
+              </svg>
+              Click a time to edit
+            </p>
+          </div>
+
+          <div class="phase-list" id="phase-list"></div>
+          <p class="loop-note">
+            <span aria-hidden="true">↻</span>
+            This sequence repeats automatically until you pause.
+          </p>
+        </section>
+      </section>
+
+      <footer class="footer">
+        <span>Made for thoughtful rooms.</span>
+        <span>All times stay on this device.</span>
+      </footer>
+      <div class="visually-hidden" id="announcements" aria-live="polite" aria-atomic="true"></div>
+    </main>
+  </body>
+</html>
